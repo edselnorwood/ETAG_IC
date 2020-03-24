@@ -1,0 +1,270 @@
+
+	<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+
+    <form id="file-form" action="handler.php" method="POST">
+        <input type="file" id="file-select" name="photos[]" multiple/>
+        <button type="submit" id="upload-button">Upload</button>
+    </form>
+
+    <script>
+        d3.csv("WireAnt_Spatial_Pts.csv", function(data) {
+            console.log(data[0]);
+        });
+    </script>
+
+	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+
+
+    <html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+
+<body>
+    <script>
+    Plotly.d3.csv("WireAnt_Spatial_Pts.csv", function(rows) {
+        console.log(rows);
+        var data = [];
+        for(let i=0;i<rows.length;i++) 
+                data.push(rows.map(row => row [i]));
+        Plotly.newPlot('chart',[{
+           z: data,
+           type: 'surface'
+    }]);
+    });
+    </script>
+
+    <div id="chart"></div>
+</body>
+</html>
+
+
+
+var size = rows.length, x = new Array(size), y = new Array(size), z = new Array(size), i, j;
+
+        for(var i = 0; i < size; i++) {
+            x[i] = row
+            z[i] = new Array(size);
+        }
+
+        for(var i = 0; i < size; i++) {
+            for(j = 0; j < size; j++) {
+                var r2 = x[i]*x[i] + y[j]*y[j];
+                z[i][j] = Math.sin(x[i]) * Math.cos(y[j]) * Math.sin(r2) / Math.log(r2+1);
+            }
+        }
+
+<script>
+        Highcharts.chart('container', {
+        chart: {
+            type: 'vector'
+        },
+        title: {
+            text: 'Vector Plot'
+        },
+
+        subtitle: {
+            text: 'Data input from a remote CSV file'
+        },
+
+        data: {
+            csvURL: 'https://raw.githubusercontent.com/edselnorwood/testCSVdata/blob/master/BFields_WireAnt.csv',
+        }
+        });
+    </script>
+
+
+    start: Math.min(...bfield_z),
+            end: Math.max(...bfield_z),
+
+
+
+        xaxis: {
+            range: [x_min, x_max]
+        },
+
+
+for (var i = 0; i < size; i++) {
+            bfield_x[i] = rows[i].BX * 10**5
+            bfield_y[i] = rows[i].BY * 10**5
+            bfield_z[i] = rows[i].BZ * 10**5
+            ant_x[i] = rows[i].x
+            ant_y[i] = rows[i].y
+        };
+        var x_max = Math.max(...bfield_x);
+        var x_min = Math.min(...bfield_x);
+
+
+
+--------------------------------------------------------------------------------
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+
+<body>
+    <script>
+    Plotly.d3.csv("data/BFields_WireAnt.csv", function(rows) {
+        var size = rows.length, bfield_x = new Array(size), bfield_y = new Array(size), i, j;
+
+
+        for (var i = 0; i < size; i++) {
+            bfield_x[i] = rows[i].BX * 10**5
+            bfield_y[i] = rows[i].BY * 10**5
+        };
+
+
+        var grouped_x = _.mapValues(_.groupBy(rows, 'x'));
+        var grouped_y = _.mapValues(_.groupBy(rows, 'y'));
+        
+
+        var BZ_arr = [];
+        for(var key in grouped_x) {
+            var sel_obj = grouped_x[key];
+            var arr = [];
+            for(var index in [...Array(grouped_x[key].length).keys()]) {
+                arr.push((sel_obj[index].BZ) * 10**5);
+            };
+            BZ_arr.push(arr);
+        };
+        console.log(BZ_arr);
+
+        var layout1 = {
+        title: 'B-Field (Bx, By)'
+        };
+
+        var data_bfield1 = [{
+        z: BZ_arr,
+        type: 'contour'
+        }];
+
+        Plotly.newPlot('chart1', data_bfield1, layout1);
+
+
+    });
+</script>
+
+    <div id="chart1"></div>
+    <div id="chart2"></div>
+    
+</body>
+</html>
+--------------------------------------------------------------------------------
+
+
+        var BZ_arr = [];
+        for(var key in grouped_x) {
+            var sel_obj = grouped_x[key];
+            BZ_arr.push(_.mapValues(_.groupBy(sel_obj, 'y')));
+        };
+
+        var BZ_arr = [];
+        for(var key in grouped_x) {
+            var sel_obj = grouped_x[key];
+            BZ_arr.push(_.mapValues(_.groupBy(sel_obj, 'y')));
+        };
+
+--------------------------------------------------------------------------------
+
+
+        var grouped_x = _.mapValues(_.groupBy(rows, 'x'));
+        var grouped_z = _.mapValues(_.groupBy(rows, 'z'));
+        var X2 = [];
+        var Z2 = [];
+        var B2 = [];
+        
+        for(var key in grouped_x) {
+            var temp = [];
+            for (var i = 0; i < 50; i++) {
+                temp.push(key)
+            };
+            X2.push(temp) 
+        };
+
+        for (var i = 0; i < 50; i++) {
+            var temp = [];
+            for(var key in grouped_z) {
+                temp.push(key) 
+            };
+            Z2.push(temp)
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        var arrBX = math.reshape(bfield_x, [50,50,50]);
+        var arrBY = math.reshape(bfield_y, [50,50,50]);
+        var arrBZ = math.reshape(bfield_z, [50,50,50]);
+        var arrX = math.reshape(x_arr, [50,50,50]);
+        var arrY = math.reshape(y_arr, [50,50,50]);
+        var arrZ = math.reshape(z_arr, [50,50,50]);
+        var normB = new Array(50);
+        for (var i = 0; i < normB.length; ++i) {
+        normB[i] = new Array(50);
+            for (var j = 0; j < normB.length; ++j) {
+            normB[i][j] = new Array(50);
+            }
+        }
+
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                for (var k = 0; k < 50; k++) {
+                    normB[i][j][k] = Math.sqrt(Math.pow(arrBX[i][j][k], 2) + Math.pow(arrBY[i][j][k], 2) + Math.pow(arrBZ[i][j][k], 2))
+                };
+            };
+        };
+        
+        var nBf = new Array(50);
+        for (var i = 0; i < nBf.length; ++i) {
+            nBf[i] = new Array(50);
+        }
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                    nBf[i][j] = normB[25][i][j]
+            };
+        };
+
+        var nXf = new Array(50);
+        for (var i = 0; i < nXf.length; ++i) {
+            nXf[i] = new Array(50);
+        }
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                    nXf[i][j] = arrX[25][i][j]
+            };
+        };
+
+        var nZf = new Array(50);
+        for (var i = 0; i < nZf.length; ++i) {
+            nZf[i] = new Array(50);
+        }
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                    nZf[i][j] = arrZ[25][i][j]
+            };
+        };
+        
+        
+        console.table(nXf);
+        console.table(nZf);
+        console.log(nBf);
+        

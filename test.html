@@ -1,0 +1,125 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script src="script.js"></script>
+    <script src="https://unpkg.com/mathjs@6.6.1/dist/math.min.js"></script>
+</head>
+
+
+<body>
+    <script>
+    
+    Plotly.d3.csv("data/BFields_WireAnt.csv", function(rows) {
+        
+        var size = rows.length, bfield_x = new Array(size), 
+            bfield_y = new Array(size), bfield_z = new Array(size), nBX = new Array(size), nBY = new Array(size),
+                                nBZ = new Array(size), y_arr = new Array(size), 
+                                        x_arr = new Array(size), z_arr = new Array(size), i, j;
+
+
+        for (var i = 0; i < size; i++) {
+            bfield_x[i] = parseFloat(rows[i].BX)
+            bfield_y[i] = parseFloat(rows[i].BY)
+            bfield_z[i] = parseFloat(rows[i].BZ)
+            x_arr[i] = parseFloat(rows[i].x)
+            y_arr[i] = parseFloat(rows[i].y)
+            z_arr[i] = parseFloat(rows[i].z)
+            //nBX[i] = bfield_x[i]/normB[i]
+            //nBY[i] = bfield_y[i]/normB[i]
+            //nBZ[i] = bfield_z[i]/normB[i]
+        };
+        var arrBX = math.reshape(bfield_x, [50,50,50]);
+        var arrBY = math.reshape(bfield_y, [50,50,50]);
+        var arrBZ = math.reshape(bfield_z, [50,50,50]);
+        var arrX = math.reshape(x_arr, [50,50,50]);
+        var arrY = math.reshape(y_arr, [50,50,50]);
+        var arrZ = math.reshape(z_arr, [50,50,50]);
+        var normB = new Array(50);
+        for (var i = 0; i < normB.length; ++i) {
+        normB[i] = new Array(50);
+            for (var j = 0; j < normB.length; ++j) {
+            normB[i][j] = new Array(50);
+            }
+        }
+
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                for (var k = 0; k < 50; k++) {
+                    normB[i][j][k] = Math.sqrt(Math.pow(arrBX[i][j][k], 2) + Math.pow(arrBY[i][j][k], 2) + Math.pow(arrBZ[i][j][k], 2))
+                };
+            };
+        };
+        
+        var nBf = new Array(50);
+        for (var i = 0; i < nBf.length; ++i) {
+            nBf[i] = new Array(50);
+        }
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                    nBf[i][j] = normB[25][i][j]
+            };
+        };
+
+        var nXf = new Array(50);
+        for (var i = 0; i < nXf.length; ++i) {
+            nXf[i] = new Array(50);
+        }
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                    nXf[i][j] = arrX[25][i][j]
+            };
+        };
+
+        var nYf = new Array(50);
+        for (var i = 0; i < nYf.length; ++i) {
+            nYf[i] = new Array(50);
+        }
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                    nYf[i][j] = arrY[25][i][j]
+            };
+        };
+
+        /*
+        console.table(nXf);
+        console.table(nZf);
+        console.table(nBf);
+        */
+
+/*
+        var BZ_arr = [];
+        for(var key in grouped_x) {
+            var sel_obj = grouped_x[key];
+            var arr = [];
+            for(var index in [...Array(grouped_x[key].length).keys()]) {
+                arr.push((sel_obj[index].BZ) * 10**5);
+            };
+            BZ_arr.push(arr);
+        };
+        console.log(BZ_arr);
+*/
+
+        var layout1 = {
+        title: 'B-Field (Bx, By)'
+        };
+
+        var data_bfield1 = [{
+        z: nBf,
+        type: 'contour'
+        }];
+
+        Plotly.newPlot('chart1', data_bfield1, layout1);
+
+
+    });
+</script>
+
+    <div id="chart1"></div>
+    <div id="chart2"></div>
+    
+</body>
+</html>
